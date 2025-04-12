@@ -18,7 +18,7 @@ func NewMySqlRepository(db *sql.DB) ports.ProductRepository {
 }
 
 func (r *mySQLProductRepository) CreateProduct(product *model.Product) (bool, error) {
-	query := "INSERT INTO products (name, price, brand, description, category, imageurl) VALUES (?, ?, ?)"
+	query := "INSERT INTO products (name, price, brand, description, category, image_url) VALUES (?, ?, ?, ?, ?, ?)"
 	_, err := r.db.Exec(query, product.Name, product.Price, product.Brand, product.Description, product.Category, product.ImageURL)
 	if err != nil {
 		return false, err
