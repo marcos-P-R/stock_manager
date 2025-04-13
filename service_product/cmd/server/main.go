@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/marcos-P-R/stock_manager/service_product/internal/handler"
 	"github.com/marcos-P-R/stock_manager/service_product/internal/repository"
-	"github.com/marcos-P-R/stock_manager/service_product/internal/usecases"
+	"github.com/marcos-P-R/stock_manager/service_product/internal/usecases/product"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -37,7 +37,7 @@ func main() {
 	}
 
 	repo := repository.NewMySqlRepository(db)
-	productUseCase := usecases.NewProductUseCase(repo)
+	productUseCase := product.NewProductUseCase(repo)
 	handler := handler.NewProductHandler(productUseCase)
 
 	r := gin.Default()
