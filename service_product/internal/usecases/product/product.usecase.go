@@ -1,7 +1,6 @@
-package usecases
+package product
 
 import (
-	"github.com/marcos-P-R/stock_manager/service_product/internal/core/model"
 	"github.com/marcos-P-R/stock_manager/service_product/internal/core/ports"
 )
 
@@ -13,12 +12,4 @@ func NewProductUseCase(productRepository ports.ProductRepository) ports.ProductU
 	return &ProductUseCase{
 		productRepository: productRepository,
 	}
-}
-
-func (p *ProductUseCase) Create(product *model.Product) (bool, error) {
-	created, error := p.productRepository.CreateProduct(product)
-	if error != nil {
-		return false, error
-	}
-	return created, nil
 }
