@@ -18,6 +18,7 @@ func NewProductHandler(product ports.ProductUseCase) *ProductHandler {
 
 func (h *ProductHandler) RegisterRoutes(rg *gin.RouterGroup) {
 	rg.POST("/", h.CreateProduct)
+	rg.GET("/:sku", h.GetProduct)
 }
 
 func (h *ProductHandler) CreateProduct(c *gin.Context) {
@@ -40,4 +41,21 @@ func (h *ProductHandler) CreateProduct(c *gin.Context) {
 	}
 
 	c.JSON(201, gin.H{"message": "Product created successfully"})
+}
+
+func (h *ProductHandler) GetProduct(c *gin.Context) {
+	sku := c.Param("sku")
+	product, err := h.product.GetProductBySKU(sku)
+
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to retrieve product"})
+		return
+	}
+
+	if product == nil {
+		c.JSON(404, gin.H{"error": "Product not found"})
+		return
+	}
+
+	c.JSON(200, product)
 }

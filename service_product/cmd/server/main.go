@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/marcos-P-R/stock_manager/service_product/internal/handler"
 	"github.com/marcos-P-R/stock_manager/service_product/internal/repository"
-	"github.com/marcos-P-R/stock_manager/service_product/internal/usecases"
+	"github.com/marcos-P-R/stock_manager/service_product/internal/usecases/product"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -23,6 +23,7 @@ func main() {
 		CREATE TABLE IF NOT EXISTS products (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL,
+		sku TEXT NOT NULL UNIQUE,
 		price REAL NOT NULL,
 		brand TEXT,
 		description TEXT,
@@ -36,7 +37,7 @@ func main() {
 	}
 
 	repo := repository.NewMySqlRepository(db)
-	productUseCase := usecases.NewProductUseCase(repo)
+	productUseCase := product.NewProductUseCase(repo)
 	handler := handler.NewProductHandler(productUseCase)
 
 	r := gin.Default()
