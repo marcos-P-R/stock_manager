@@ -19,6 +19,7 @@ func NewProductHandler(product ports.ProductUseCase) *ProductHandler {
 func (h *ProductHandler) RegisterRoutes(rg *gin.RouterGroup) {
 	rg.POST("/", h.CreateProduct)
 	rg.GET("/:sku", h.GetProduct)
+	rg.GET("/category/:category", h.GetProductsByCategory)
 }
 
 func (h *ProductHandler) CreateProduct(c *gin.Context) {
@@ -58,4 +59,21 @@ func (h *ProductHandler) GetProduct(c *gin.Context) {
 	}
 
 	c.JSON(200, product)
+}
+
+func (h *ProductHandler) GetProductsByCategory(c *gin.Context) {
+	category := c.Param("category")
+	products, err := h.product.GetProductsByCategory(category)
+
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to retrieve products"})
+		return
+	}
+
+	if len(products) == 0 {
+		c.JSON(404, gin.H{"error": "No products found in this category"})
+		return
+	}
+
+	c.JSON(200, products)
 }
