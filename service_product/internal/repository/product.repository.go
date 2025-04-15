@@ -40,3 +40,29 @@ func (r *mySQLProductRepository) GetProductBySKU(sku string) (*model.Product, er
 	}
 	return product, nil
 }
+
+func (r *mySQLProductRepository) GetProductsByCategory(category string) ([]*model.Product, error) {
+	query := "SELECT name, sku, price, brand, description, category, image_url FROM products WHERE category = ?"
+	rows, err := r.db.Query(query, category)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	products := []*model.Product{}
+
+	for rows.Next() {
+		product := &model.Product{}
+		err := rows.Scan(&product.Name, &product.Sku, &product.Price, &product.Brand, &product.Description, &product.Category, &product.ImageURL)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, product)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return products, nil
+}
